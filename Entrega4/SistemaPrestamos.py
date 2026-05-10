@@ -18,22 +18,34 @@ class SistemaPrestamos:
         #self.usuario_admin = "admin"
         #self.password_admin = "admin"
 
+    #Normalizo imput RUT para todo efecto
+    def normalizar_rut(self, rut: str) -> str:
+        return rut.replace(".", "").replace(" ", "").upper()
+    
     #Funcion que valida RUT por MOD11
     def validar_rut_mod11(self, rut: str) -> bool:
+        rut = self.normalizar_rut(rut)
         try:
             cuerpo, dv = rut.split("-")
             dv = dv.upper()
         except:
             return False
+
+        # Validar cuerpo numerico
         if not cuerpo.isdigit():
+            return False
+        # Validar largo razonable
+        if len(cuerpo) < 7 or len(cuerpo) > 8:
             return False
         suma = 0
         factor = 2
+
         for digito in reversed(cuerpo):
             suma += int(digito) * factor
             factor += 1
             if factor > 7:
                 factor = 2
+
         resto = 11 - (suma % 11)
         if resto == 11:
             dv_esperado = "0"
@@ -41,9 +53,10 @@ class SistemaPrestamos:
             dv_esperado = "K"
         else:
             dv_esperado = str(resto)
+
         return dv == dv_esperado
     
-    #Funcion que valida que RUT no exista previamente como alumno o docente en ingreso
+    #Funcion que valida que RUT no exista previamente como alumno o docente en ingreso, llama a función buscar_rut_por_persona
     def rut_existe_general(self, rut: str) -> bool:
         persona, tipo_persona = self.buscar_persona_por_rut(rut)
         return persona is not None
@@ -117,7 +130,7 @@ class SistemaPrestamos:
     def prestamo_ya_devuelto(self, numero_prestamo: int) -> bool:
         return any(d.numero_prestamo == numero_prestamo for d in self.devoluciones)
     
-    #Funcion dedicada a determinar si RUT es de alumno o docente, utilizada en reporte prestamos y devoluciones
+    #Funcion dedicada a determinar si RUT es de alumno o docente, o no existe
     def buscar_persona_por_rut(self, rut: str):
         for alumno in self.alumnos:
             if alumno.rut == rut:
@@ -140,6 +153,8 @@ class SistemaPrestamos:
 #Metodo registrar alumnos    
     def registrar_alumno(self):
         rut = input("RUT: ")
+        rut = self.normalizar_rut(rut)
+
         #Valido por MOD11 el RUT con funcion
         if not self.validar_rut_mod11(rut):
             print("RUT invalido (modulo 11).")
@@ -174,6 +189,7 @@ class SistemaPrestamos:
 #Metodo registrar docente
     def registrar_docente(self):
         rut = input("RUT: ")
+        rut = self.normalizar_rut(rut)
         #Valido por MOD11 el RUT con funcion
         if not self.validar_rut_mod11(rut):
             print("RUT invalido (modulo 11).")

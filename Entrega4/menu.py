@@ -40,6 +40,7 @@ def menu():
             print("=======================================")
             print("======INGRESO PRESTAMOS=======")
             rut_solicitante=input("RUT solicitante: ")
+            rut_solicitante = sistema.normalizar_rut(rut_solicitante)
             if not sistema.validar_rut_mod11(rut_solicitante):
                 print("RUT invalido (modulo 11).")
                 sistema.pausar_tecla()
@@ -120,6 +121,7 @@ def menu():
                 sistema.reporte_prestamos_por_tipo(tipo)
             else:
                 rut_prestado=input("RUT solicitante prestamo: ")
+                rut_prestado = sistema.normalizar_rut(rut_prestado)
                 if not sistema.validar_rut_mod11(rut_prestado):
                     print("RUT invalido (modulo 11).")
                     sistema.pausar_tecla()
@@ -155,7 +157,8 @@ def menu():
                         tipo="Error en registro"   
                 sistema.reporte_devoluciones_por_tipo(tipo)
             else:
-                rut_prestado=input("RUT solicitante prestamo: ")
+                rut_prestado=input("RUT solicitante devolución: ")
+                rut_prestado = sistema.normalizar_rut(rut_prestado)
                 if not sistema.validar_rut_mod11(rut_prestado):
                     print("RUT invalido (modulo 11).")
                     sistema.pausar_tecla()
