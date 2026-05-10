@@ -37,6 +37,15 @@ def menu():
             sistema.pausar_tecla()
         elif opc == 4:
             sistema.limpiar_pantalla()
+            if len(sistema.materiales) <= 0:
+                print("No es factible registrar prestamos si no ha ingresado materiales")
+                sistema.pausar_tecla()
+                continue
+
+            if len(sistema.alumnos) <= 0 and len(sistema.docentes) <= 0:
+                print("No es factible registrar prestamos si no ha ingresado personas")
+                sistema.pausar_tecla()
+                continue
             print("=======================================")
             print("======INGRESO PRESTAMOS=======")
             rut_solicitante=input("RUT solicitante: ")
@@ -75,6 +84,15 @@ def menu():
             sistema.pausar_tecla()
         elif opc == 5:
             sistema.limpiar_pantalla()
+            if len(sistema.prestamos) <= 0:
+                print("No es factible registrar devoluciones si no ha ingresado prestamos")
+                sistema.pausar_tecla()
+                continue
+
+            if len(sistema.alumnos) <= 0 and len(sistema.docentes) <= 0:
+                print("No es factible registrar devoluciones si no ha ingresado personas")
+                sistema.pausar_tecla()
+                continue
             print("=======================================")
             print("======INGRESO DEVOLUCION=======")
             sistema.registrar_devolucion(
@@ -91,12 +109,24 @@ def menu():
             print("2. Reporte Docentes")
             opcp = sistema.pedir_entero("Seleccione una opción: ", minimo=1, maximo=2)
             if opcp == 1:
+                if len(sistema.alumnos) <= 0:
+                    print("No hay alumnos en sistema para generar reporte")
+                    sistema.pausar_tecla()
+                    continue
                 sistema.reporte_alumnos()
             else:
+                if len(sistema.docentes) <= 0:
+                    print("No hay Docentes en sistema para generar reporte")
+                    sistema.pausar_tecla()
+                    continue
                 sistema.reporte_docentes()
             sistema.pausar_tecla()
         elif opc == 7:
             sistema.limpiar_pantalla()
+            if len(sistema.prestamos) <= 0:
+                print("No hay prestamos en sistema para generar reporte")
+                sistema.pausar_tecla()
+                continue
             print("=======================================")
             print("======REPORTE PRESTAMOS=======")
             print("=======================================")
@@ -134,6 +164,10 @@ def menu():
             sistema.pausar_tecla()
         elif opc == 8:
             sistema.limpiar_pantalla()
+            if len(sistema.devoluciones) <= 0:
+                print("No hay devoluciones en sistema para generar reporte")
+                sistema.pausar_tecla()
+                continue
             print("=======================================")
             print("======REPORTE DEVOLUCIONES=======")
             print("=======================================")
@@ -171,6 +205,10 @@ def menu():
             sistema.pausar_tecla()
         elif opc == 9:
             sistema.limpiar_pantalla()
+            if len(sistema.materiales) <= 0:
+                print("No hay materiales en sistema para generar reporte")
+                sistema.pausar_tecla()
+                continue
             print("=======================================")
             print("======REPORTE MATERIALES=======")
             print("=======================================")
